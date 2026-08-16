@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> </title>
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    background: #000;
+    overflow: hidden;
+    cursor: crosshair;
+    font-family: "Courier New", Courier, monospace;
+    user-select: none;
+  }
+  #secret {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1.5s ease;
+    padding: 0 10vw;
+    z-index: 5;
+  }
+  #secret.visible { opacity: 1; }
+  #secret p {
+    color: #5f5f5f;
+    text-align: center;
+    font-size: 15px;
+    line-height: 1.9;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 10px #3a3a3a;
+  }
+</style>
+</head>
+<body>
+
+<audio id="track" src="soundtrack.mp3" loop preload="auto"></audio>
+
+<div id="secret">
+  <p>*(After all... there wasn't anything to look at in the room, besides a single tree.)</p>
+</div>
+
+<script>
+  var track = document.getElementById('track');
+  var secret = document.getElementById('secret');
+  var NORTH_ZONE = 120;
+  var started = false;
+
+  track.play().catch(function() {});
+
+  document.addEventListener('pointerdown', function startOnce() {
+    if (started) return;
+    started = true;
+    track.play().catch(function() {});
+    document.removeEventListener('pointerdown', startOnce);
+  });
+
+  document.addEventListener('click', function(e) {
+    if (e.clientY <= NORTH_ZONE) {
+      secret.classList.add('visible');
+    } else {
+      secret.classList.remove('visible');
+    }
+  });
+</script>
+
+</body>
+</html>
