@@ -52,14 +52,19 @@
   var NORTH_ZONE = 120;
   var started = false;
 
-  track.play().catch(function() {});
-
-  document.addEventListener('pointerdown', function startOnce() {
+  function tryPlay() {
     if (started) return;
-    started = true;
-    track.play().catch(function() {});
-    document.removeEventListener('pointerdown', startOnce);
-  });
+    var p = track.play();
+    if (p && p.then) {
+      p.then(function() { started = true; }).catch(function() {});
+    }
+  }
+
+  window.addEventListener('load', tryPlay);
+  document.addEventListener('pointerdown', tryPlay);
+  document.addEventListener('touchstart', tryPlay);
+  document.addEventListener('keydown', tryPlay);
+  document.addEventListener('wheel', tryPlay);
 
   document.addEventListener('click', function(e) {
     if (e.clientY <= NORTH_ZONE) {
